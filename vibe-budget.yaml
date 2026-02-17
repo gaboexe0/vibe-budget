@@ -1,0 +1,100 @@
+name: vibe-budget
+version: 1.0.0
+description: CLI tool to estimate AI coding costs and compare models
+type: module
+
+bin:
+  vibe-budget: ./bin/index.ts
+
+scripts:
+  dev: tsx bin/index.ts
+  build: tsc
+  start: tsx bin/index.ts
+
+dependencies:
+  axios: ^1.6.0
+  chalk: ^5.3.0
+  commander: ^12.0.0
+  dotenv: ^16.3.0
+  inquirer: ^9.2.0
+
+devDependencies:
+  "@types/node": ^20.10.0
+  tsx: ^4.7.0
+  typescript: ^5.3.0
+
+project_types:
+  landing:
+    base_tokens: 8000
+    description: Landing pages and marketing sites
+  app:
+    base_tokens: 15000
+    description: Web applications
+  shopify_app:
+    base_tokens: 20000
+    description: Shopify apps and extensions
+  ai_agent:
+    base_tokens: 25000
+    description: AI agents and chatbots
+  api:
+    base_tokens: 12000
+    description: REST/GraphQL APIs
+  fullstack:
+    base_tokens: 30000
+    description: Full-stack applications
+
+complexity_multipliers:
+  low: 0.6
+  medium: 1.0
+  high: 1.5
+
+excluded_files:
+  - .env
+  - .env.local
+  - .env.production
+  - .gitignore
+  - .DS_Store
+  - package-lock.json
+  - yarn.lock
+  - pnpm-lock.yaml
+
+excluded_directories:
+  - node_modules
+  - .git
+  - dist
+  - build
+  - .next
+  - .nuxt
+  - coverage
+  - .cache
+  - vendor
+
+model_recommendations:
+  landing:
+    - google/gemini-1.5-flash
+    - openai/gpt-4o-mini
+    - anthropic/claude-3-haiku
+  app:
+    - openai/gpt-4o-mini
+    - google/gemini-1.5-flash
+    - anthropic/claude-3-haiku
+  shopify_app:
+    - openai/gpt-4o
+    - anthropic/claude-3.5-sonnet
+    - google/gemini-1.5-pro
+  ai_agent:
+    - anthropic/claude-3.5-sonnet
+    - openai/gpt-4o
+    - google/gemini-1.5-pro
+  api:
+    - google/gemini-1.5-flash
+    - openai/gpt-4o-mini
+    - meta-llama/llama-3.1-70b-instruct
+  fullstack:
+    - openai/gpt-4o
+    - anthropic/claude-3.5-sonnet
+    - google/gemini-1.5-pro
+
+cache:
+  duration_ms: 3600000  # 1 hour
+  file: src/data/prices-cache.json
