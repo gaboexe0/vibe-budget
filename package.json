@@ -1,6 +1,6 @@
 {
   "name": "vibe-budget",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CLI tool to estimate AI coding costs and compare models",
   "main": "bin/index.js",
   "type": "module",
