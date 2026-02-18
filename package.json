@@ -5,12 +5,18 @@
   "main": "bin/index.js",
   "type": "module",
   "bin": {
-    "vibe-budget": "./bin/index.ts"
+    "vibe-budget": "./bin/run.js"
   },
+  "files": [
+    "dist",
+    "bin",
+    "src"
+  ],
   "scripts": {
     "dev": "tsx bin/index.ts",
     "build": "tsc",
-    "start": "tsx bin/index.ts",
+    "prepare": "npm run build",
+    "start": "node dist/bin/index.js",
     "test": "vitest run",
     "test:watch": "vitest"
   },

@@ -320,4 +320,8 @@ MIT — use it, fork it, build on it.
     <a href="https://github.com/gaboexe0/vibe-budget">GitHub</a> ·
     <a href="https://openrouter.ai/models">OpenRouter Pricing</a>
   </p>
+<<<<<<< HEAD
 </div>
+=======
+</div>
+>>>>>>> d17f793 (fix: add npmignore and update for CLI)
