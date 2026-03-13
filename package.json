@@ -1,7 +1,7 @@
 {
   "name": "vibe-budget",
   "version": "1.0.1",
-  "description": "CLI tool to estimate AI coding costs and compare models",
+  "description": "Estimate and compare LLM costs for AI coding projects. Supports 85+ models via OpenRouter. Works with natural language.",
   "main": "bin/index.js",
   "type": "module",
   "bin": {
@@ -34,13 +34,7 @@
     "typescript": "^5.3.0",
     "vitest": "^4.0.18"
   },
-  "keywords": [
-    "cli",
-    "ai",
-    "coding",
-    "budget",
-    "pricing"
-  ],
+  "keywords": ["cli", "llm", "vibe-coding", "ai", "cost", "budget", "tokens", "estimator", "openrouter", "pricing", "claude", "gpt", "gemini", "deepseek", "developer-tools", "vibe-budget", "ai-tools", "coding-assistant"],
   "author": "",
   "license": "MIT"
 }

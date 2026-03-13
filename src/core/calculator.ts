@@ -1,14 +1,17 @@
 import axios from 'axios';
-import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import os from 'os';
 import { MODEL_DATA, getAllModels, getProjects, getProjectTokens, ProjectType } from '../contracts.js';
 import { colors } from '../utils/formatter.js';
 import { BENCHMARKS, getBestBenchmark } from '../benchmarks.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const CACHE_DIR = join(os.homedir(), '.vibe-budget');
+const CACHE_FILE = join(CACHE_DIR, 'prices-cache.json');
+
+if (!existsSync(CACHE_DIR)) {
+  mkdirSync(CACHE_DIR, { recursive: true });
+}
 
 export interface ModelPrice {
   id: string;
@@ -40,7 +43,6 @@ export interface ModelRecommendation {
   reason: string;
 }
 
-const CACHE_FILE = join(__dirname, '../data/prices-cache.json');
 const CACHE_DURATION = 1000 * 60 * 60;
 
 interface PriceCache {

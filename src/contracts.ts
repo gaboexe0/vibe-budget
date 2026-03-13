@@ -58,6 +58,7 @@ export const PROJECT_TOKENS = {
   cli_tool: { input: 20000, output: 40000 },
   github_actions: { input: 15000, output: 30000 },
   project_generator: { input: 25000, output: 50000 },
+  data_pipeline: { input: 20000, output: 40000 },
 
   // Frente 8: E-commerce
   stripe_payment: { input: 30000, output: 60000 },
@@ -182,6 +183,7 @@ export const PROJECT_COMPLEXITY = {
   cli_tool: 'medium',
   github_actions: 'medium',
   project_generator: 'high',
+  data_pipeline: 'medium',
 
   // Frente 8: E-commerce
   stripe_payment: 'high',
@@ -565,8 +567,9 @@ export const TASK_KEYWORDS: TaskKeyword[] = [
   { id: 'jwt_sessions', keywords: ['jwt', 'jws', 'json web token', 'access token', 'refresh token', 'jwt auth', 'bearer token'], weight: 0.8, context: ['auth', 'login', 'session', 'token', 'user'] },
 
   { id: 'cli_tool', keywords: ['cli tool', 'command line', 'herramienta cli', 'terminal', 'console app', 'bin', 'command line tool'], weight: 1.0 },
-  { id: 'github_actions', keywords: ['github actions', 'ci cd', 'cicd', 'pipeline', 'github workflow', 'actions', 'automation', 'github ci', 'ci/cd', 'ci cd pipeline', 'pipelines', 'ci pipeline', 'cd pipeline'], weight: 1.0, context: ['github', 'ci', 'cd', 'automation'] },
+  { id: 'github_actions', keywords: ['github actions', 'ci cd', 'cicd', 'github workflow', 'actions', 'automation', 'github ci', 'ci/cd'], weight: 1.0, context: ['github', 'ci', 'cd', 'automation'] },
   { id: 'project_generator', keywords: ['generator', 'scaffold', 'boilerplate', 'generador', 'yeoman', 'template', 'project scaffold'], weight: 1.0 },
+  { id: 'data_pipeline', keywords: ['python', 'pandas', 'etl', 'data pipeline', 'data cleaning', 'limpiar datos', 'transformar datos', 'csv', 'parquet'], weight: 1.0 },
 
   { id: 'stripe_payment', keywords: ['stripe', 'payment gateway', 'pasarela', 'pagos', 'stripe checkout', 'payment processing', 'stripe integration', 'stripe payments', 'process payments', 'payment', 'payments'], weight: 1.0, context: ['payment', 'ecommerce', 'checkout'] },
   { id: 'product_catalog', keywords: ['product catalog', 'catalogo productos', 'inventario', 'productos', 'inventory', 'product management'], weight: 1.0 },
@@ -736,5 +739,15 @@ export function detectTasks(description: string): { task: ProjectType; score: nu
   }
 
   const sorted = matches.sort((a, b) => b.score - a.score);
-  return resolveConflicts(sorted, description);
+  
+  const deduped = Object.values(
+    sorted.reduce((acc, m) => {
+      if (!acc[m.task] || m.score > acc[m.task].score) {
+        acc[m.task] = m;
+      }
+      return acc;
+    }, {} as Record<ProjectType, { task: ProjectType; score: number }>)
+  );
+  
+  return resolveConflicts(deduped, description);
 }

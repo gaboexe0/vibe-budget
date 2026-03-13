@@ -85,6 +85,7 @@ const TASK_NAMES: Record<string, string> = {
   auth: 'Authentication',
   landing: 'Landing Page',
   formulario: 'Form',
+  data_pipeline: 'Data Pipeline',
   
   // Cloud Integrations
   supabase_integration: 'Supabase Integration',
@@ -193,18 +194,17 @@ export async function planCommand(description?: string): Promise<void> {
   console.log('');
 
   const comparisons = compareModels(modelsWithQuality, totalInput, totalOutput);
-  const bestQP = getBestQPModel(comparisons);
+  const bestQP = getBestQPModel(modelsWithQuality, totalInput, totalOutput);
 
   console.log(colors.bold('Best Quality-Price Recommendation:'));
   console.log(colors.dim('-'.repeat(60)));
   if (bestQP) {
-    const cost = calculateCost(bestQP, totalInput, totalOutput);
     const evalScore = bestQP.evalScore || 0;
-    const qpScore = calculateQPscore(evalScore, cost.totalCost);
+    const qpScore = calculateQPscore(evalScore, bestQP.totalCost);
     console.log(`   Model:   ${colors.green(bestQP.name)}`);
     console.log(`   Provider: ${bestQP.provider}`);
     console.log(`   Quality: ${colors.cyan(evalScore.toFixed(1) + '%')}`);
-    console.log(`   Cost:    ${formatCurrency(cost.totalCost)}`);
+    console.log(`   Cost:    ${formatCurrency(bestQP.totalCost)}`);
     console.log(`   QP Score: ${colors.yellow((qpScore * 100).toFixed(0) + '/100')}`);
   }
   console.log('');
@@ -309,7 +309,6 @@ export async function planCommand(description?: string): Promise<void> {
 
   console.log(colors.dim(`\nShowing top 10 of ${comparisons.length} models`));
   
-  printPriceWarning();
   printDisclaimer();
 }
 
@@ -336,18 +335,22 @@ function detectTasksInDescription(description: string): DetectedTask[] {
 
 function calculateQPscore(evalScore: number, totalCost: number): number {
   const maxEval = 100;
-  const normalizedEval = evalScore / maxEval;
-  const normalizedCost = Math.log10(totalCost + 0.01) / Math.log10(100);
-  return (normalizedEval * 0.7) + ((1 - normalizedCost) * 0.3);
+  const normalizedEval = Math.min(1, Math.max(0, evalScore / maxEval));
+  const normalizedCost = Math.min(1, Math.max(0, Math.log10(totalCost + 0.01) / Math.log10(100)));
+  return Math.min(1, Math.max(0, (normalizedEval * 0.7) + ((1 - normalizedCost) * 0.3)));
 }
 
-function getBestQPModel(models: any[]) {
+function getBestQPModel(models: any[], inputTokens: number, outputTokens: number) {
   const modelsWithQP = models
     .filter(m => m.evalScore)
-    .map(m => ({
-      ...m,
-      qpScore: calculateQPscore(m.evalScore, m.totalCost),
-    }))
+    .map(m => {
+      const cost = calculateCost(m, inputTokens, outputTokens);
+      return {
+        ...m,
+        totalCost: cost.totalCost,
+        qpScore: calculateQPscore(m.evalScore, cost.totalCost),
+      };
+    })
     .sort((a, b) => (b.qpScore || 0) - (a.qpScore || 0));
   
   return modelsWithQP[0] || null;

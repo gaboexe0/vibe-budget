@@ -1,13 +1,14 @@
 import axios from 'axios';
-import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import os from 'os';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const CACHE_DIR = join(os.homedir(), '.vibe-budget');
+const CACHE_FILE = join(CACHE_DIR, 'prices-cache.json');
 
-const CACHE_FILE = join(__dirname, '../data/prices-cache.json');
+if (!existsSync(CACHE_DIR)) {
+  mkdirSync(CACHE_DIR, { recursive: true });
+}
 const CACHE_DURATION = 60 * 60 * 1000;
 
 interface PriceCache {

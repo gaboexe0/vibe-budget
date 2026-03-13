@@ -135,5 +135,3 @@ function printEstimate(
     });
   }
 }
-
-program.parse();

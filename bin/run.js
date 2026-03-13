@@ -8,7 +8,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const args = process.argv.slice(2);
-const result = spawn('npx', ['tsx', join(__dirname, 'index.ts'), ...args], {
+const indexPath = join(__dirname, '../dist/bin/index.js');
+
+const result = spawn('node', [indexPath, ...args], {
   stdio: 'inherit',
   shell: true
 });

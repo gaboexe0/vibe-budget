@@ -31,8 +31,8 @@ program
 program
   .command('plan')
   .description('Plan a new project and get cost estimates')
-  .argument('[description]', 'Project description or prompt')
-  .action(planCommand);
+  .argument('[description...]', 'Project description or prompt (no quotes needed)')
+  .action((descriptionParts: string[]) => planCommand(descriptionParts.join(' ')));
 
 program
   .command('prices')
