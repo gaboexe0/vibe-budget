@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkdocs=globalThis.webpackChunkdocs||[]).push([[903],{1912(s){s.exports=JSON.parse('{"blogBasePath":"/vibe-budget/blog","blogTitle":"Blog","authorsListPath":"/vibe-budget/blog/authors"}')}}]);
