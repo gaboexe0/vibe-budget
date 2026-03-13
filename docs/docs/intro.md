@@ -71,3 +71,5 @@ vibe-budget plan ecommerce con stripe y supabase
 85+ models from 10+ providers including OpenAI, Anthropic, Google, 
 DeepSeek, Mistral, Meta, Qwen, xAI, Zhipu AI, and NVIDIA — 
 all with real-time pricing via OpenRouter.
+---
+*Powered by OpenRouter*
